@@ -18,10 +18,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
     private List<Photo> photos;
     private Context context;
+    private OnPhotoClickListener listener;
 
-    public PhotoAdapter(Context context, List<Photo> photos) {
+    public interface OnPhotoClickListener {
+        void onPhotoClick(Photo photo);
+    }
+    public PhotoAdapter(Context context, List<Photo> photos, OnPhotoClickListener listener) {
         this.context = context;
         this.photos = photos;
+        this.listener = listener;
     }
 
     public void setPhotos(List<Photo> photos) {
@@ -53,6 +58,11 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
             // Optional: set a placeholder image if needed
             holder.imageView.setImageResource(R.drawable.gorilla);
         }
+        holder.itemView.setOnClickListener(v -> {
+            if (listener !=null) {
+                listener.onPhotoClick(photo);
+            }
+        });
     }
 
     @Override

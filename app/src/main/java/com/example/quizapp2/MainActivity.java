@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup RecyclerView with an empty adapter.
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new PhotoAdapter(this, new ArrayList<>());
-        recyclerView.setAdapter(adapter);
+
 
         // Obtain the PhotoViewModel and observe the LiveData.
         PhotoViewModel viewModel = new ViewModelProvider(this).get(PhotoViewModel.class);
@@ -48,10 +46,24 @@ public class MainActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
 
-        // Setup button to navigate to AddPhotoActivity.
+        adapter = new PhotoAdapter(this, new ArrayList<>(), photo -> {
+            //delete when click photo in recycler
+            viewModel.delete(photo);
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        // button to AddPhotoActivity.
         Button addPhotoButton = findViewById(R.id.buttonAddPhoto);
         addPhotoButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddPhotoActivity.class);
+            startActivity(intent);
+        });
+
+        //button to quiz
+        Button btnActivity2 = findViewById(R.id.btnactivity2);
+        btnActivity2.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MainActivity2.class);
             startActivity(intent);
         });
     }
