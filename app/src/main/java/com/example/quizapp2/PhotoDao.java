@@ -18,4 +18,7 @@ public interface PhotoDao {
 
     @Query("SELECT * FROM photos")
     LiveData<List<Photo>> getAllPhotos();
+
+    @Query("SELECT COUNT(*) FROM photos")
+    LiveData<Integer> getPhotoCount();
 }

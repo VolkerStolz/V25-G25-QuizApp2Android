@@ -10,6 +10,7 @@ public class DefaultPhotos {
         List<Photo> photos = new ArrayList<>();
         photos.add(new Photo("Gorilla", R.drawable.gorilla, null));
         photos.add(new Photo("Wolf", R.drawable.wolf, null));
+        photos.add(new Photo("Tiger", R.drawable.tiger, null));
         return photos;
     }
 }

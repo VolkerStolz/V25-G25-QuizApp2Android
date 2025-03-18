@@ -55,7 +55,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                 e.printStackTrace();
             }
         } else {
-            // Optional: set a placeholder image if needed
+            // placeholder image if needed
             holder.imageView.setImageResource(R.drawable.gorilla);
         }
         holder.itemView.setOnClickListener(v -> {

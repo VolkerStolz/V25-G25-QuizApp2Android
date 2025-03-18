@@ -1,5 +1,5 @@
 
-/**
+
 
 package com.example.quizapp2;
 
@@ -13,64 +13,139 @@ import java.util.Collections;
 import java.util.List;
 
 public class QuizViewModel extends ViewModel {
-    // The list of quiz photos (loaded from Room or defaults)
-    private List<Photo> quizPhotos = new ArrayList<>();
+    // List of photos for the quiz.
+    private MutableLiveData<List<Photo>> quizPhotos = new MutableLiveData<>(new ArrayList<>());
 
-    // Quiz state: current question index, score, and number of attempts
+
+    // Quiz state: current question index and score.
     private final MutableLiveData<Integer> currentIndex = new MutableLiveData<>(0);
     private final MutableLiveData<Integer> score = new MutableLiveData<>(0);
-    private final MutableLiveData<Integer> attempts = new MutableLiveData<>(0);
 
-    // List of alternative answer options (for wrong choices)
+    // A list of alternative names (for generating wrong answer options).
     private final List<String> randomWords = new ArrayList<>(Arrays.asList("Ku", "Sau", "Okse", "Katt", "Hund"));
 
-    // Initialize the quiz with a list of photos.
+    /**
+     * Initialize the quiz with a given list of photos.
+     * This can be a merged list from defaults and user-added photos.
+     */
+    // Getters to allow observers in the Activity to react to data changes.
+    public LiveData<List<Photo>> getQuizPhotos() {
+        return quizPhotos;
+    }
+
+    public LiveData<Integer> getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public LiveData<Integer> getScore() {
+        return score;
+    }
+
+    public List<String> getRandomWords() {
+        return randomWords;
+    }
+
+    /**
+     * Initialize the quiz with a given list of photos.
+     * If you already have a LiveData source, you can call this method
+     * after extracting the List with getValue().
+     */
     public void initQuiz(List<Photo> photos) {
-        this.quizPhotos = photos;
-        // Optionally, shuffle the photos to randomize quiz order.
-        Collections.shuffle(this.quizPhotos);
-        currentIndex.setValue(0);
-        score.setValue(0);
-        attempts.setValue(0);
-    }
-
-    // Getters for LiveData state
-    public LiveData<Integer> getCurrentIndex() { return currentIndex; }
-    public LiveData<Integer> getScore() { return score; }
-    public LiveData<Integer> getAttempts() { return attempts; }
-    public List<Photo> getQuizPhotos() { return quizPhotos; }
-    public List<String> getRandomWords() { return randomWords; }
-
-    // Get the current Photo based on the currentIndex.
-    public Photo getCurrentPhoto() {
-        Integer index = currentIndex.getValue();
-        if (quizPhotos != null && index != null && index < quizPhotos.size()) {
-            return quizPhotos.get(index);
+        if (photos != null && !photos.isEmpty()) {
+            // Shuffle photos to randomize order.
+            Collections.shuffle(photos);
+            quizPhotos.setValue(photos);
+            currentIndex.setValue(0);
+            score.setValue(0);
         }
-        return null;
     }
 
-    // Update score and attempts based on whether the answer is correct.
-    public void updateScore(boolean isCorrect) {
-        int currentScore = score.getValue() != null ? score.getValue() : 0;
-        int currentAttempts = attempts.getValue() != null ? attempts.getValue() : 0;
-        if (isCorrect) {
-            score.setValue(currentScore + 1);
-        } else {
-            // Subtract one point but do not allow negative scores.
-            score.setValue(Math.max(0, currentScore - 1));
-        }
-        attempts.setValue(currentAttempts + 1);
-    }
-
-    // Move to the next question; returns true if successful, false if no more questions.
-    public boolean nextQuestion() {
+    /**
+     * Move to the next question.
+     */
+    public void nextQuestion() {
+        List<Photo> photos = quizPhotos.getValue();
         Integer index = currentIndex.getValue();
-        if (quizPhotos != null && index != null && index < quizPhotos.size() - 1) {
+        if (photos != null && index != null && index < photos.size() - 1) {
             currentIndex.setValue(index + 1);
-            return true;
         }
-        return false;
+    }
+
+    /**
+     * Increase the quiz score.
+     */
+    public void incrementScore() {
+        Integer currentScore = score.getValue();
+        if (currentScore != null) {
+            score.setValue(currentScore + 1);
+        }
+    }
+    public QuestionData updateQuestion() {
+        List<Photo> photos = quizPhotos.getValue();
+        Integer index = currentIndex.getValue();
+        if (photos == null || index == null || index >= photos.size()) {
+            return null; // Quiz completed.
+        }
+
+        Photo currentPhoto = photos.get(index);
+        String correctAnswer = currentPhoto.getName();
+
+        // Prepare a list of alternative answers.
+        List<String> alternatives = new ArrayList<>(randomWords);
+        // Remove the correct answer if it exists among the alternatives.
+        alternatives.remove(correctAnswer);
+        Collections.shuffle(alternatives);
+
+        List<String> options = new ArrayList<>();
+        options.add(correctAnswer);
+        if (alternatives.size() >= 2) {
+            options.add(alternatives.get(0));
+            options.add(alternatives.get(1));
+        } else {
+            options.addAll(alternatives);
+        }
+        // Shuffle options so that the correct answer is in a random position.
+        Collections.shuffle(options);
+
+        return new QuestionData(currentPhoto, options);
+    }
+
+    /**
+     * Checks whether the selected answer is correct.
+     * If correct, increments the score.
+     * Returns true if the answer is correct; otherwise, false.
+     */
+    public boolean checkAnswer(String selectedAnswer) {
+        List<Photo> photos = quizPhotos.getValue();
+        Integer index = currentIndex.getValue();
+        if (photos == null || index == null || index >= photos.size()) {
+            return false;
+        }
+
+        Photo currentPhoto = photos.get(index);
+        String correctAnswer = currentPhoto.getName();
+        boolean isCorrect = selectedAnswer.equals(correctAnswer);
+        if (isCorrect) {
+            incrementScore();
+        }
+        return isCorrect;
+    }
+
+    public static class QuestionData {
+        private final Photo photo;
+        private final List<String> options;
+
+        public QuestionData(Photo photo, List<String> options) {
+            this.photo = photo;
+            this.options = options;
+        }
+
+        public Photo getPhoto() {
+            return photo;
+        }
+
+        public List<String> getOptions() {
+            return options;
+        }
     }
 }
-*/

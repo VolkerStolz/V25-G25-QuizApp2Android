@@ -11,11 +11,13 @@ public class PhotoRepo {
 
     private PhotoDao photoDao;
     private LiveData<List<Photo>> allPhotos;
+    private final LiveData<Integer> photoCount;
 
     public PhotoRepo(Application application) {
         PhotoDatabase db = PhotoDatabase.getDatabase(application);
         photoDao = db.photoDao();
         allPhotos = photoDao.getAllPhotos();
+        photoCount = photoDao.getPhotoCount();
     }
 
     public LiveData<List<Photo>> getAllPhotos() {
@@ -32,5 +34,8 @@ public class PhotoRepo {
         PhotoDatabase.databaseWriteExecutor.execute(() -> {
             photoDao.delete(photo);
         });
+    }
+    public LiveData<Integer> getPhotoCount() {
+        return photoCount;  //Expose count to ViewModel
     }
 }

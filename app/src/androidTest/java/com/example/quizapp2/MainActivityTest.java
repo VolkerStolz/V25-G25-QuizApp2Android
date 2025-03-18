@@ -30,6 +30,6 @@ public class MainActivityTest {
     public void testnavigationToActivity2() {
         onView(withId(R.id.btnactivity2)).perform(click());
 
-        onView(withId(R.id.textView2)).check(matches(isDisplayed()));
+        onView(withId(R.id.textViewName)).check(matches(isDisplayed()));
     }
 }
