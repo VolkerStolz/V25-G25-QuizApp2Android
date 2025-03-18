@@ -7,6 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertEquals;
 
+import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -23,19 +24,21 @@ public class QuizActivityTest {
 
     @Test
     public void testScoreUpdatesCorrectly() {
-        // Finner korrekt svar fra activity først.
         final String[] correctAnswer = new String[1];
 
         activityScenarioRule.getScenario().onActivity(activity -> {
-            correctAnswer[0] = activity.getCorrectAnswer();
+            QuizFragment quizFragment = (QuizFragment) activity.getSupportFragmentManager()
+                    .findFragmentById(R.id.fragment_container);
+
+            if (quizFragment != null) {
+                correctAnswer[0] = quizFragment.getCorrectAnswer();
+            }
         });
 
-
         if (correctAnswer[0] != null) {
-            onView(withText(correctAnswer[0])).perform(click()); // Click the correct answer dynamically
+            onView(withText(correctAnswer[0])).perform(click());
         }
 
-        // venter til UI har oppdatert før den sjekker scoren
         onView(withId(R.id.scoreTextView)).check(matches(withText("Score: 1")));
     }
 }

@@ -1,47 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:id="@+id/main"
+<androidx.fragment.app.FragmentContainerView android:id="@+id/fragment_container"
+    android:name="com.example.quizapp2.QuizFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/photoImageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="photo"/>
-
-    <Button
-        android:id="@+id/btnNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Next Image" />
-
-    <Button
-        android:id="@+id/btnAnswer1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Answer 1" />
-
-    <Button
-        android:id="@+id/btnAnswer2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Answer 2" />
-
-    <Button
-        android:id="@+id/btnAnswer3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Answer 3" />
-    <TextView
-        android:id="@+id/scoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Score: 0"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
-
-</LinearLayout>
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

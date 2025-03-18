@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <!-- ImageView on the left -->
+    <ImageView
+        android:id="@+id/photoImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/quizContainer"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintWidth_percent="0.4"/>
+
+
+    <!-- Quiz Container (Right Side) -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/quizContainer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/photoImageView"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Answer Buttons -->
+        <Button
+            android:id="@+id/btnAnswer1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Answer 1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnAnswer2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Answer 2"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnAnswer3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Answer 3"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Score Display -->
+        <TextView
+            android:id="@+id/scoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Score: 0"
+            android:textSize="30sp"
+            app:layout_constraintTop_toBottomOf="@id/btnAnswer3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Next Button -->
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            app:layout_constraintTop_toBottomOf="@id/scoreTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

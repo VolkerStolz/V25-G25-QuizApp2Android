@@ -13,6 +13,7 @@ public class PhotoViewModel extends AndroidViewModel {
     private PhotoRepo repository;
     private LiveData<List<Photo>> allPhotos;
     private final MutableLiveData<Integer> currentIndex = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> score = new MutableLiveData<>(0);
     private final LiveData<Integer> photoCount;
     public PhotoViewModel(@NonNull Application application) {
         super(application);
@@ -42,5 +43,15 @@ public class PhotoViewModel extends AndroidViewModel {
 
     public LiveData<Integer> getPhotoCount() {
         return photoCount;
+    }
+
+    public LiveData<Integer> getScore(){
+        return score;
+    }
+
+    public void incrementScore() {
+        if (score.getValue() != null) {
+            score.setValue(score.getValue() + 1);
+        }
     }
 }
