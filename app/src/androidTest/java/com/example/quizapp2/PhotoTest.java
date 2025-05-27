@@ -62,16 +62,11 @@ public class PhotoTest {
     public void testImageAddedToRecyclerView() throws InterruptedException {
         // Wait for RecyclerView to appear
         waitForView(withId(R.id.recyclerView));
-
         // Get initial item count
         AtomicInteger initialCount = new AtomicInteger();
         activityScenarioRule.getScenario().onActivity(activity -> {
-            PhotoViewModel viewModel = new ViewModelProvider(activity).get(PhotoViewModel.class);
-            try {
-                initialCount.set(getOrAwaitValue(viewModel.getPhotoCount())); // ✅ Get item count before adding
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            RecyclerView rv = activity.findViewById(R.id.recyclerView);
+            initialCount.set(rv.getAdapter().getItemCount());
         });
 
         // 🔥 Click "Add Photo" button (this starts `AddPhotoActivity`)
@@ -86,7 +81,7 @@ public class PhotoTest {
         resultData.setDataAndType(imageUri, "image/*");
 
         Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(Activity.RESULT_OK, resultData);
-        intending(hasAction(Intent.ACTION_PICK)).respondWith(result);
+        intending(hasAction(Intent.ACTION_OPEN_DOCUMENT)).respondWith(result);
 
         // 🔥 Perform actions inside `AddPhotoActivity`
         onView(withId(R.id.editTextPhotoName)).perform(typeText("Gorilla Photo"));
@@ -94,7 +89,7 @@ public class PhotoTest {
         onView(withId(R.id.buttonSavePhoto)).perform(click());  // Save the photo
 
         // 🔥 Now go back to MainActivity
-        pressBack();
+        // pressBack();
 
         // Wait for RecyclerView update
         waitForView(withId(R.id.recyclerView));
